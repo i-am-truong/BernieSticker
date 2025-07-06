@@ -2,10 +2,24 @@
 
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-primary: "Josefin Sans";
   --color-primary: #5B21B6;
   --color-dark: #4C1D95;
   --color-lighter: #F5F3FF;
   --color-light: #DDD6FE;
+  --color-normalbg: #f3f4f6;
+  --color-darkbg: #1e2939;
+}
+
+body {
+  @apply bg-normalbg dark:bg-darkbg;
+  min-height: 100vh;
+}
+
+#root {
+  @apply bg-normalbg dark:bg-darkbg;
+  min-height: 100vh;
 }
