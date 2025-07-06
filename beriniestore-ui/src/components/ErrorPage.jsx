@@ -15,7 +15,7 @@ export default function ErrorPage() {
   }
 
   return (
-    <div className="flex flex-col mi-h-[980px]">
+    <div className="flex flex-col min-h-[980px]">
       <Header />
       {/* Main Content */}
       <main className="flex-grow">
