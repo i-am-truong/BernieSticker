@@ -33,19 +33,4 @@ public class Product {
     @Column(name = "IMAGE_URL", length = 500)
     private String imageUrl;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "CREATED_AT", nullable = false)
-    private Instant createdAt;
-
-    @Column(name = "CREATED_BY", nullable = false ,length = 20)
-    private String createdBy;
-
-    @ColumnDefault("NULL")
-    @Column(name = "UPDATED_AT")
-    private Instant updatedAt;
-
-    @ColumnDefault("NULL")
-    @Column(name = "UPDATED_BY", length = 20)
-    private String updatedBy;
-
 }

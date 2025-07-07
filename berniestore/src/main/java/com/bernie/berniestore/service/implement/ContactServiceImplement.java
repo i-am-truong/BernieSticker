@@ -18,15 +18,9 @@ public class ContactServiceImplement implements IContactService {
 
     @Override
     public boolean saveContact(ContactRequestDTO contactRequestDTO) {
-        try {
             Contact contact = transformToEntity(contactRequestDTO);
-            contact.setCreatedAt(Instant.now());
-            contact.setCreatedBy(contactRequestDTO.getName());
             contactRepository.save(contact);
             return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     private Contact transformToEntity(ContactRequestDTO contactRequestDTO) {
