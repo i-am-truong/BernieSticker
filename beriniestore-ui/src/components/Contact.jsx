@@ -150,8 +150,13 @@ export async function contactAction({ request, params }) {
     await apiClient.post("/contacts", contactData);
     return { success: true };
   } catch (error) {
+    if (error.response?.status === 400) {
+      return { success: false, error: error.response?.data };
+    }
     throw new Response(
-      error.message || "Failed to submit your message. Please try again.",
+      error.response?.data?.errorMessage ||
+        error.message ||
+        "Failed to submit your message. Please try again.",
       { status: error.status || 500 }
     );
   }

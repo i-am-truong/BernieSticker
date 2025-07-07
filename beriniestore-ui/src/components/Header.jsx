@@ -6,11 +6,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
+import { useCart } from "../store/cart-context";
+import { Link, NavLink } from "react-router-dom";
 
 export default function Header() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") === "dark" ? "dark" : "light";
   });
+
+  const { totalQuantity } = useCart();
 
   useEffect(() => {
     if (theme === "dark") {
@@ -50,32 +54,55 @@ export default function Header() {
           </button>
           <ul className="flex space-x-6">
             <li>
-              <a href="/" className={navLinkClass}>
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  isActive ? `underline ${navLinkClass}` : navLinkClass
+                }
+              >
                 Home
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="/about" className={navLinkClass}>
+              <NavLink
+                to="/about"
+                className={({ isActive }) =>
+                  isActive ? `underline ${navLinkClass}` : navLinkClass
+                }
+              >
                 About
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="/contact" className={navLinkClass}>
+              <NavLink
+                to="/contact"
+                className={({ isActive }) =>
+                  isActive ? `underline ${navLinkClass}` : navLinkClass
+                }
+              >
                 Contact
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="/login" className={navLinkClass}>
+              <NavLink
+                to="/login"
+                className={({ isActive }) =>
+                  isActive ? `underline ${navLinkClass}` : navLinkClass
+                }
+              >
                 Login
-              </a>
+              </NavLink>
             </li>
             <li>
-              <a href="/cart" className={navLinkClass}>
+              <Link to="/cart" className=" relative text-primary py-2">
                 <FontAwesomeIcon
                   icon={faShoppingBasket}
-                  className="dark:text-light"
+                  className="text-primary dark:text-light w-6"
                 />
-              </a>
+                <div className="absolute -top-2 -right-6 text-xs bg-yellow-400 text-black font-semibold rounded-full px-2 py-1 leading-none">
+                  {totalQuantity}
+                </div>
+              </Link>
             </li>
           </ul>
         </nav>

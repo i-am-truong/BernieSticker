@@ -2,7 +2,10 @@ package com.bernie.berniestore.controller;
 
 import com.bernie.berniestore.dto.ContactRequestDTO;
 import com.bernie.berniestore.service.implement.IContactService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,15 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class ContactController {
 
-    private final IContactService icontactService;
+    private final IContactService iContactService;
 
     @PostMapping
-    public String saveContact(@RequestBody ContactRequestDTO contactRequestDTO) {
-        boolean isSaved = icontactService.saveContact(contactRequestDTO);
-        if (isSaved) {
-            return "Request processed successfully!";
-        } else {
-            return "An error occurred. Please try again or contact Dev team.";
-        }
+    public ResponseEntity<String> saveContact (@Valid @RequestBody ContactRequestDTO contactRequestDTO) {
+        iContactService.saveContact(contactRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Request processed successfully!");
     }
 }
