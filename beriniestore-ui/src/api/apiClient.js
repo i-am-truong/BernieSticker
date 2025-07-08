@@ -8,4 +8,18 @@ const apiClient = axios.create({
     timeout: 10000,
 })
 
+apiClient.interceptors.request.use(
+    (config) => {
+        const jwtToken = localStorage.getItem('jwtToken');
+        if (jwtToken) {
+            config.headers.Authorization = `Bearer ${jwtToken}`;
+        }
+        return config;
+    }
+    ,
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 export default apiClient;
