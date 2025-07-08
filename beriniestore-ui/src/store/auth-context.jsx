@@ -13,7 +13,7 @@ const authReducer = (prevState, action) => {
       return {
         ...prevState,
         jwtToken: action.payload.jwtToken,
-        user: action.payload,
+        user: action.payload.user,
         isAuthenticated: true,
       };
     case LOGOUT:

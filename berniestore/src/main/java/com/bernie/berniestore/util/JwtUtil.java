@@ -1,6 +1,7 @@
 package com.bernie.berniestore.util;
 
 import com.bernie.berniestore.constants.ApplicationConstants;
+import com.bernie.berniestore.entity.Customer;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,12 @@ public class JwtUtil {
         String secret = environment.getProperty(ApplicationConstants.JWT_SECRET_KEY,
                 ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
         SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        User fetchedUser = (User) authentication.getPrincipal();
+        Customer fetchedCustomer = (Customer) authentication.getPrincipal();
         jwt = Jwts.builder().issuer("Bernie Store")
                 .subject("JWT Token")
-                .claim("username", fetchedUser.getUsername())
+                .claim("username", fetchedCustomer.getName())
+                .claim("email", fetchedCustomer.getEmail())
+                .claim("mobileNumber", fetchedCustomer.getMobileNumber())
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + 60 * 60 * 1000))
                 .signWith(secretKey)
