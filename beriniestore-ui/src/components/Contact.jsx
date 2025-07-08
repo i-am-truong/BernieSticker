@@ -68,8 +68,8 @@ export default function Contact() {
             minLength={5}
             maxLength={30}
           />
-          {actionData?.error?.name && (
-            <p className="text-red-500 text-sm mt-1">{actionData.error.name}</p>
+          {actionData?.errors?.name && (
+            <p className="text-red-500 text-sm mt-1">{actionData.errors.name}</p>
           )}
         </div>
 
