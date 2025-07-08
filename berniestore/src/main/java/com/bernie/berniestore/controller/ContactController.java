@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
-@RequestMapping("api/v1/contacts")
+@RequestMapping("/api/v1/contacts")
 @RequiredArgsConstructor
 public class ContactController {
 
