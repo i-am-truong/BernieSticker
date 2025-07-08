@@ -27,7 +27,7 @@ public class ProfileServiceImplement implements IProfileService{
     @Override
     public ProfileResponseDTO updateProfile(ProfileRequestDTO profileRequestDTO) {
         Customer customer = getAuthenticatedCustomer();
-        boolean isEmailUpdated = !customer.getEmail().equals(profileRequestDTO.getEmail().trim());
+        boolean isEmailUpdated = !customer.getEmail().equalsIgnoreCase(profileRequestDTO.getEmail().trim());
         BeanUtils.copyProperties(profileRequestDTO,customer);
         Address address = customer.getAddress();
         if (address == null) {
