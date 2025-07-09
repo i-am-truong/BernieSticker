@@ -36,20 +36,16 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
             try {
                 String jwtToken = authorizationHeader.substring(7);
                 Environment environment = getEnvironment();
-                if (null != environment) {
-                    String secret = environment.getProperty(ApplicationConstants.JWT_SECRET_KEY,
-                            ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
-                    SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-                    if (null != secretKey) {
-                        Claims claims = Jwts.parser().verifyWith(secretKey)
-                                .build().parseSignedClaims(jwtToken).getPayload();
-                        String username = String.valueOf(claims.get("email"));
-                        String roles = String.valueOf(claims.get("roles"));
-                        Authentication authentication = new UsernamePasswordAuthenticationToken(username,
-                                null, AuthorityUtils.commaSeparatedStringToAuthorityList(roles));
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
-                }
+                String secret = environment.getProperty(ApplicationConstants.JWT_SECRET_KEY,
+                        ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
+                SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+                Claims claims = Jwts.parser().verifyWith(secretKey)
+                        .build().parseSignedClaims(jwtToken).getPayload();
+                String username = String.valueOf(claims.get("email"));
+                String roles = String.valueOf(claims.get("roles"));
+                Authentication authentication = new UsernamePasswordAuthenticationToken(username,
+                        null, AuthorityUtils.commaSeparatedStringToAuthorityList(roles));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
                 throw new BadCredentialsException("Invalid Token received!");
             }
