@@ -5,6 +5,7 @@ import com.bernie.berniestore.dto.LoginResponseDTO;
 import com.bernie.berniestore.dto.RegisterRequestDTO;
 import com.bernie.berniestore.dto.UserDTO;
 import com.bernie.berniestore.entity.Customer;
+import com.bernie.berniestore.entity.Role;
 import com.bernie.berniestore.repository.CustomerRepository;
 import com.bernie.berniestore.util.JwtUtil;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.password.CompromisedPasswordC
 import org.springframework.security.authentication.password.CompromisedPasswordDecision;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -30,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -50,6 +54,8 @@ public class AuthController {
             var userDTO = new UserDTO();
             var loggedInUser = (Customer) authentication.getPrincipal();
             BeanUtils.copyProperties(loggedInUser, userDTO);
+            userDTO.setRoles(authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.joining(",")));
             String jwtToken = jwtUtil.generateJwtToken(authentication);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new LoginResponseDTO(HttpStatus.OK.getReasonPhrase(), userDTO, jwtToken));
@@ -87,6 +93,9 @@ public class AuthController {
         Customer customer = new Customer();
         BeanUtils.copyProperties(registerRequestDTO, customer);
         customer.setPasswordHash(passwordEncoder.encode(registerRequestDTO.getPassword()));
+        Role role = new Role();
+        role.setName("ROLE_USER");
+        customer.setRoles(Set.of(role));
         customerRepository.save(customer);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("User registered successfully");

@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -35,15 +36,20 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
             try {
                 String jwtToken = authorizationHeader.substring(7);
                 Environment environment = getEnvironment();
-                String secret = environment.getProperty(ApplicationConstants.JWT_SECRET_KEY,
-                        ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
-                SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-                Claims claims = Jwts.parser().verifyWith(secretKey)
-                        .build().parseSignedClaims(jwtToken).getPayload();
-                String username = String.valueOf(claims.get("email"));
-                Authentication authentication = new UsernamePasswordAuthenticationToken(username,
-                        null, Collections.emptyList());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (null != environment) {
+                    String secret = environment.getProperty(ApplicationConstants.JWT_SECRET_KEY,
+                            ApplicationConstants.JWT_SECRET_DEFAULT_VALUE);
+                    SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+                    if (null != secretKey) {
+                        Claims claims = Jwts.parser().verifyWith(secretKey)
+                                .build().parseSignedClaims(jwtToken).getPayload();
+                        String username = String.valueOf(claims.get("email"));
+                        String roles = String.valueOf(claims.get("roles"));
+                        Authentication authentication = new UsernamePasswordAuthenticationToken(username,
+                                null, AuthorityUtils.commaSeparatedStringToAuthorityList(roles));
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                }
             } catch (Exception e) {
                 throw new BadCredentialsException("Invalid Token received!");
             }
