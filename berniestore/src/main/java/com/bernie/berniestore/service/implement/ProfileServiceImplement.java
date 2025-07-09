@@ -28,7 +28,7 @@ public class ProfileServiceImplement implements IProfileService{
     public ProfileResponseDTO updateProfile(ProfileRequestDTO profileRequestDTO) {
         Customer customer = getAuthenticatedCustomer();
         boolean isEmailUpdated = !customer.getEmail().equalsIgnoreCase(profileRequestDTO.getEmail().trim());
-        BeanUtils.copyProperties(profileRequestDTO,customer);
+        BeanUtils.copyProperties(profileRequestDTO, customer);
         Address address = customer.getAddress();
         if (address == null) {
             address = new Address();
@@ -48,7 +48,7 @@ public class ProfileServiceImplement implements IProfileService{
 
     private ProfileResponseDTO mapCustomerToProfileResponseDTO(Customer customer) {
         ProfileResponseDTO profileResponseDTO = new ProfileResponseDTO();
-        BeanUtils.copyProperties(customer,profileResponseDTO);
+        BeanUtils.copyProperties(customer, profileResponseDTO);
         if(customer.getAddress() != null){
             profileResponseDTO.setStreet(customer.getAddress().getStreet());
             profileResponseDTO.setCity(customer.getAddress().getCity());
