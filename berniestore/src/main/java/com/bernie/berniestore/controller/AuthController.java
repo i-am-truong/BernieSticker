@@ -1,9 +1,6 @@
 package com.bernie.berniestore.controller;
 
-import com.bernie.berniestore.dto.LoginRequestDTO;
-import com.bernie.berniestore.dto.LoginResponseDTO;
-import com.bernie.berniestore.dto.RegisterRequestDTO;
-import com.bernie.berniestore.dto.UserDTO;
+import com.bernie.berniestore.dto.*;
 import com.bernie.berniestore.entity.Customer;
 import com.bernie.berniestore.entity.Role;
 import com.bernie.berniestore.repository.CustomerRepository;
@@ -21,9 +18,7 @@ import org.springframework.security.authentication.password.CompromisedPasswordD
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,6 +51,11 @@ public class AuthController {
             BeanUtils.copyProperties(loggedInUser, userDTO);
             userDTO.setRoles(authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                     .collect(Collectors.joining(",")));
+            if (loggedInUser.getAddress() != null) {
+                AddressDTO addressDTO = new AddressDTO();
+                BeanUtils.copyProperties(loggedInUser.getAddress(), addressDTO);
+                userDTO.setAddress(addressDTO);
+            }
             String jwtToken = jwtUtil.generateJwtToken(authentication);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new LoginResponseDTO(HttpStatus.OK.getReasonPhrase(), userDTO, jwtToken));
