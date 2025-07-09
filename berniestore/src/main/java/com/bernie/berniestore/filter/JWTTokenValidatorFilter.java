@@ -2,6 +2,7 @@ package com.bernie.berniestore.filter;
 
 import com.bernie.berniestore.constants.ApplicationConstants;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
@@ -46,6 +47,10 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(username,
                         null, AuthorityUtils.commaSeparatedStringToAuthorityList(roles));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (ExpiredJwtException exception) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token has expired!");
+                return;
             } catch (Exception e) {
                 throw new BadCredentialsException("Invalid Token received!");
             }

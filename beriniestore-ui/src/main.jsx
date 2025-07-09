@@ -29,6 +29,13 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { AuthProvider } from "./store/auth-context.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import Register, { registerAction } from "./components/Register.jsx";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import OrderSuccess from "./components/OrderSuccess.jsx";
+
+const stripePromise = loadStripe(
+  "pk_test_51RioICRdoRCC2pvA7rWHVuibCnV17YZdqyDKOch81noK3xCW1qWwwjL5hEbgqynOLVFgeFsOMM0JVezmwZl6xvey00ZXkVCiXl"
+);
 
 const routeDefinitions = createRoutesFromElements(
   <Route path="/" element={<App />} errorElement={<ErrorPage />}>
@@ -42,6 +49,7 @@ const routeDefinitions = createRoutesFromElements(
     <Route path="/products/:productId" element={<ProductDetail />} />
     <Route element={<ProtectedRoute />}>
       <Route path="/checkout" element={<CheckoutForm />} />
+      <Route path="/order-success" element={<OrderSuccess />} />
       <Route
         path="/profile"
         element={<Profile />}
@@ -62,20 +70,22 @@ const appRouter = createBrowserRouter(routeDefinitions);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
-      <CartProvider>
-        <RouterProvider router={appRouter} />
-      </CartProvider>
-    </AuthProvider>
-    <ToastContainer
-      position="top-right"
-      autoClose={3000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      draggable
-      pauseOnHover
-      theme={localStorage.getItem("theme") === "dark" ? "dark" : "light"}
-      transition={Bounce}
-    />
+    <Elements stripe={stripePromise}>
+      <AuthProvider>
+        <CartProvider>
+          <RouterProvider router={appRouter} />
+        </CartProvider>
+      </AuthProvider>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        draggable
+        pauseOnHover
+        theme={localStorage.getItem("theme") === "dark" ? "dark" : "light"}
+        transition={Bounce}
+      />
+    </Elements>
   </StrictMode>
 );

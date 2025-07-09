@@ -1,5 +1,6 @@
 package com.bernie.berniestore.service.implement;
 
+import com.bernie.berniestore.dto.AddressDTO;
 import com.bernie.berniestore.dto.ProfileRequestDTO;
 import com.bernie.berniestore.dto.ProfileResponseDTO;
 import com.bernie.berniestore.entity.Address;
@@ -32,7 +33,7 @@ public class ProfileServiceImplement implements IProfileService{
         Address address = customer.getAddress();
         if (address == null) {
             address = new Address();
-            customer.setAddress(address);
+            address.setCustomer(customer);
         }
         address.setStreet(profileRequestDTO.getStreet());
         address.setCity(profileRequestDTO.getCity());
@@ -50,17 +51,15 @@ public class ProfileServiceImplement implements IProfileService{
         ProfileResponseDTO profileResponseDTO = new ProfileResponseDTO();
         BeanUtils.copyProperties(customer, profileResponseDTO);
         if(customer.getAddress() != null){
-            profileResponseDTO.setStreet(customer.getAddress().getStreet());
-            profileResponseDTO.setCity(customer.getAddress().getCity());
-            profileResponseDTO.setState(customer.getAddress().getState());
-            profileResponseDTO.setPostalCode(customer.getAddress().getPostalCode());
-            profileResponseDTO.setCountry(customer.getAddress().getCountry());
+            AddressDTO addressDTO = new AddressDTO();
+            BeanUtils.copyProperties(customer.getAddress(), addressDTO);
+            profileResponseDTO.setAddress(addressDTO);
 
         }
         return profileResponseDTO;
     }
 
-    private Customer getAuthenticatedCustomer() {
+    public Customer getAuthenticatedCustomer() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         return customerRepository.findByEmail(email)
