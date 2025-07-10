@@ -1,7 +1,9 @@
 package com.bernie.berniestore.service.implement;
 
 import com.bernie.berniestore.constants.ApplicationConstants;
+import com.bernie.berniestore.dto.OrderItemResponseDTO;
 import com.bernie.berniestore.dto.OrderRequestDTO;
+import com.bernie.berniestore.dto.OrderResponseDTO;
 import com.bernie.berniestore.entity.Customer;
 import com.bernie.berniestore.entity.Order;
 import com.bernie.berniestore.entity.OrderItem;
@@ -11,6 +13,8 @@ import com.bernie.berniestore.repository.OrderRepository;
 import com.bernie.berniestore.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +47,40 @@ public class OrderServiceImplement implements IOrderService{
         }).toList();
         order.setOrderItems(orderItems);
         orderRepository.save(order);
+    }
+
+    @Override
+    public List<OrderResponseDTO> getCustomerOrders() {
+        Customer customer = profileServiceImplement.getAuthenticatedCustomer();
+        List<Order> orders = orderRepository.findOrdersByCustomerWithNativeQuery(customer.getCustomerId());
+        return  orders.stream().map(this::mapToOrderResponseDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderResponseDTO> getAllPendingOrders() {
+        List<Order> orders = orderRepository.findOrdersByStatusWithNativeQuery(ApplicationConstants.ORDER_STATUS_CREATED);
+        return orders.stream().map(this::mapToOrderResponseDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateOrderStatus(Long orderId, String orderStatus) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        orderRepository.updateOrderStatus(orderId,orderStatus,email);
+    }
+
+    private OrderResponseDTO mapToOrderResponseDTO(Order order) {
+        List<OrderItemResponseDTO> itemDTOs = order.getOrderItems().stream()
+                .map(this::mapToOrderItemResponseDTO)
+                .toList();
+        return new OrderResponseDTO(order.getOrderId(),
+                order.getOrderStatus(), order.getTotalPrice(), order.getCreatedAt().toString(), itemDTOs);
+    }
+
+    private OrderItemResponseDTO mapToOrderItemResponseDTO(OrderItem orderItem) {
+        return new OrderItemResponseDTO(
+                orderItem.getProduct().getName(), orderItem.getQuantity(),
+                orderItem.getPrice(), orderItem.getProduct().getImageUrl());
+
     }
 }

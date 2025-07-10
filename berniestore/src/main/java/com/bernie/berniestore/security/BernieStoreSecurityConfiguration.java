@@ -44,6 +44,9 @@ public class BernieStoreSecurityConfiguration {
                     publicPaths.forEach(path ->
                             requests.requestMatchers(path).permitAll());
                     requests.requestMatchers("/api/v1/admin/**").hasRole("ADMIN");
+                    requests.requestMatchers("/berniestore/actuator/**").hasRole("ADMIN");
+                    requests.requestMatchers("/swagger-ui.html", "/swagger-ui/**",
+                            "/v3/api-docs/**").hasAnyRole("USER","ADMIN");
                     requests.anyRequest().hasAnyRole("USER", "ADMIN");
                 })
                 .addFilterBefore(new JWTTokenValidatorFilter(publicPaths), BasicAuthenticationFilter.class)
