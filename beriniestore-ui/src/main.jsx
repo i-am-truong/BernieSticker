@@ -22,9 +22,11 @@ import Profile, {
   profileAction,
   profileLoader,
 } from "./components/Profile.jsx";
-import Orders from "./components/Orders.jsx";
-import AdminOrders from "./components/admin/AdminOrders.jsx";
-import Messages from "./components/admin/Messages.jsx";
+import Orders, { ordersLoader } from "./components/Orders.jsx";
+import AdminOrders, {
+  adminOrdersLoader,
+} from "./components/admin/AdminOrders.jsx";
+import Messages, { messagesLoader } from "./components/admin/Messages.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { AuthProvider } from "./store/auth-context.jsx";
 import "react-toastify/dist/ReactToastify.css";
@@ -59,9 +61,17 @@ const routeDefinitions = createRoutesFromElements(
           return !actionResult?.success;
         }}
       />
-      <Route path="/orders" element={<Orders />} />
-      <Route path="/admin/orders" element={<AdminOrders />} />
-      <Route path="/admin/messages" element={<Messages />} />
+      <Route path="/orders" element={<Orders />} loader={ordersLoader} />
+      <Route
+        path="/admin/orders"
+        element={<AdminOrders />}
+        loader={adminOrdersLoader}
+      />
+      <Route
+        path="/admin/messages"
+        element={<Messages />}
+        loader={messagesLoader}
+      />
     </Route>
   </Route>
 );
