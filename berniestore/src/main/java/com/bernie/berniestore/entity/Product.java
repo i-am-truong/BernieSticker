@@ -28,7 +28,7 @@ public class Product extends BaseEntity{
     private BigDecimal price;
 
     @Column(name = "POPULARITY", nullable = false)
-    private String popularity;
+    private Integer popularity;
 
     @Column(name = "IMAGE_URL", length = 500)
     private String imageUrl;

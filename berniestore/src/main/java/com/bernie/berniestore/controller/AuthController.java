@@ -4,6 +4,7 @@ import com.bernie.berniestore.dto.*;
 import com.bernie.berniestore.entity.Customer;
 import com.bernie.berniestore.entity.Role;
 import com.bernie.berniestore.repository.CustomerRepository;
+import com.bernie.berniestore.repository.RoleRepository;
 import com.bernie.berniestore.util.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
     private final JwtUtil jwtUtil;
     private final CompromisedPasswordChecker compromisedPasswordChecker;
     private final CustomerRepository customerRepository;
@@ -93,9 +95,7 @@ public class AuthController {
         Customer customer = new Customer();
         BeanUtils.copyProperties(registerRequestDTO, customer);
         customer.setPasswordHash(passwordEncoder.encode(registerRequestDTO.getPassword()));
-        Role role = new Role();
-        role.setName("ROLE_USER");
-        customer.setRoles(Set.of(role));
+        roleRepository.findByName("ROLE_USER").ifPresent(role -> customer.setRoles(Set.of(role)));
         customerRepository.save(customer);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("User registered successfully");

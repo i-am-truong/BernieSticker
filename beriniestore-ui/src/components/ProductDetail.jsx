@@ -7,7 +7,8 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useCart } from "../store/cart-context";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/cart-slice";
 
 export default function ProductDetail() {
   const location = useLocation();
@@ -17,11 +18,11 @@ export default function ProductDetail() {
   const zoomRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
   const [backgroundPosition, setBackgroundPosition] = useState("center");
-  const { addToCart } = useCart();
+  const dispatch = useDispatch();
 
   const handleAddToCart = () => {
     if (quantity < 1) return;
-    addToCart(product, quantity);
+    dispatch(addToCart({ product, quantity }));
   };
 
   const handleMouseMove = (e) => {
@@ -85,7 +86,6 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* Product Options */}
           <div className="flex flex-col space-y-4">
             {/* Quantity Input */}
             <div className="flex items-center space-x-4">

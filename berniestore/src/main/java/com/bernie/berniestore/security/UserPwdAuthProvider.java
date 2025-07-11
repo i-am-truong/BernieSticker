@@ -4,6 +4,7 @@ import com.bernie.berniestore.entity.Customer;
 import com.bernie.berniestore.entity.Role;
 import com.bernie.berniestore.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Set;
 
-
+//@Profile("prod")
 @Component
 @RequiredArgsConstructor
 public class UserPwdAuthProvider implements AuthenticationProvider {

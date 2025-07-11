@@ -30,9 +30,10 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     private final List<String> publicPaths;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String authorizationHeader = request.getHeader(ApplicationConstants.JWT_HEADER);
-        if (null != authorizationHeader){
+        if (null != authorizationHeader && authorizationHeader.startsWith("Bearer ")){
             try {
                 String jwtToken = authorizationHeader.substring(7);
                 Environment environment = getEnvironment();

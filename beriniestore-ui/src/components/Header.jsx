@@ -7,10 +7,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect, useRef } from "react";
-import { useCart } from "../store/cart-context";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAuth } from "../store/auth-context";
+import { useSelector, useDispatch } from "react-redux";
+import { selectTotalQuantity } from "../store/cart-slice";
+import { selectIsAuthenticated, selectUser, logout } from "../store/auth-slice";
 
 export default function Header() {
   const [theme, setTheme] = useState(() => {
@@ -30,8 +31,10 @@ export default function Header() {
     setIsUserMenuOpen((prev) => !prev);
   };
 
-  const { totalQuantity } = useCart();
-  const { isAuthenticated, user, logout } = useAuth();
+  const totalQuantity = useSelector(selectTotalQuantity);
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectUser);
   const isAdmin = user?.roles?.includes("ROLE_ADMIN");
 
   useEffect(() => {
@@ -53,7 +56,7 @@ export default function Header() {
 
   const handleLogout = (event) => {
     event.preventDefault();
-    logout();
+    dispatch(logout());
     toast.success("You have been logged out successfully.");
     navigate("/home");
   };
@@ -71,6 +74,7 @@ export default function Header() {
 
   const dropdownLinkClass =
     "block w-full text-left px-4 py-2 text-lg font-primary font-semibold text-primary dark:text-light hover:bg-gray-100 dark:hover:bg-gray-600";
+
   return (
     <header className="border-b border-gray-300 dark:border-gray-600 sticky top-0 z-20 bg-normalbg dark:bg-darkbg">
       <div className="flex items-center justify-between mx-auto max-w-[1152px] px-6 py-4">
@@ -127,7 +131,13 @@ export default function Header() {
                     onClick={toggleUserMenu}
                     className="relative text-primary"
                   >
-                    <span className={navLinkClass}>Hello Bernie Truong</span>
+                    <span className={navLinkClass}>
+                      {`Hello ${
+                        user.name.length > 5
+                          ? `${user.name.slice(0, 5)}...`
+                          : user.name
+                      }`}
+                    </span>
                     <FontAwesomeIcon
                       icon={faAngleDown}
                       className="text-primary dark:text-light w-6 h-6"
