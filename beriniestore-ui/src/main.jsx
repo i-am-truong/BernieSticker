@@ -10,13 +10,15 @@ import {
 } from "react-router-dom";
 import ErrorPage from "./components/ErrorPage.jsx";
 import Home, { productsLoader } from "./components/Home.jsx";
-import Contact, { contactAction } from "./components/Contact.jsx";
+import Contact, {
+  contactAction,
+  contactLoader,
+} from "./components/Contact.jsx";
 import Login, { loginAction } from "./components/Login.jsx";
 import Cart from "./components/Cart.jsx";
 import ProductDetail from "./components/ProductDetail.jsx";
 import { Bounce, ToastContainer } from "react-toastify";
 import About from "./components/About.jsx";
-import { CartProvider } from "./store/cart-context.jsx";
 import CheckoutForm from "./components/CheckoutForm.jsx";
 import Profile, {
   profileAction,
@@ -28,12 +30,13 @@ import AdminOrders, {
 } from "./components/admin/AdminOrders.jsx";
 import Messages, { messagesLoader } from "./components/admin/Messages.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import { AuthProvider } from "./store/auth-context.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import Register, { registerAction } from "./components/Register.jsx";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import OrderSuccess from "./components/OrderSuccess.jsx";
+import { Provider } from "react-redux";
+import store from "./store/store.js";
 
 const stripePromise = loadStripe(
   "pk_test_51RioICRdoRCC2pvA7rWHVuibCnV17YZdqyDKOch81noK3xCW1qWwwjL5hEbgqynOLVFgeFsOMM0JVezmwZl6xvey00ZXkVCiXl"
@@ -44,7 +47,12 @@ const routeDefinitions = createRoutesFromElements(
     <Route index element={<Home />} loader={productsLoader} />
     <Route path="/home" element={<Home />} loader={productsLoader} />
     <Route path="/about" element={<About />} />
-    <Route path="/contact" element={<Contact />} action={contactAction} />
+    <Route
+      path="/contact"
+      element={<Contact />}
+      action={contactAction}
+      loader={contactLoader}
+    />
     <Route path="/login" element={<Login />} action={loginAction} />
     <Route path="/register" element={<Register />} action={registerAction} />
     <Route path="/cart" element={<Cart />} />
@@ -81,11 +89,9 @@ const appRouter = createBrowserRouter(routeDefinitions);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Elements stripe={stripePromise}>
-      <AuthProvider>
-        <CartProvider>
-          <RouterProvider router={appRouter} />
-        </CartProvider>
-      </AuthProvider>
+      <Provider store={store}>
+        <RouterProvider router={appRouter} />
+      </Provider>
       <ToastContainer
         position="top-center"
         autoClose={3000}
