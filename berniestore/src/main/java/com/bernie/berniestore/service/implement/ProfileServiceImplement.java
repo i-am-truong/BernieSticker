@@ -6,6 +6,7 @@ import com.bernie.berniestore.dto.ProfileResponseDTO;
 import com.bernie.berniestore.entity.Address;
 import com.bernie.berniestore.entity.Customer;
 import com.bernie.berniestore.repository.CustomerRepository;
+import com.bernie.berniestore.service.IProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ProfileServiceImplement implements IProfileService{
+public class ProfileServiceImplement implements IProfileService {
 
     private final CustomerRepository customerRepository;
 

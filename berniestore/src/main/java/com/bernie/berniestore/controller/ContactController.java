@@ -2,7 +2,7 @@ package com.bernie.berniestore.controller;
 
 import com.bernie.berniestore.dto.ContactInfoDTO;
 import com.bernie.berniestore.dto.ContactRequestDTO;
-import com.bernie.berniestore.service.implement.IContactService;
+import com.bernie.berniestore.service.IContactService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.bernie.berniestore.service.implement;
+package com.bernie.berniestore.service;
 
 import com.bernie.berniestore.dto.PaymentIntentRequestDTO;
 import com.bernie.berniestore.dto.PaymentIntentResponseDTO;

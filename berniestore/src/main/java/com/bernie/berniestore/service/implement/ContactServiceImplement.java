@@ -6,6 +6,7 @@ import com.bernie.berniestore.dto.ContactResponseDTO;
 import com.bernie.berniestore.entity.Contact;
 import com.bernie.berniestore.exception.ResourceNotFoundException;
 import com.bernie.berniestore.repository.ContactRepository;
+import com.bernie.berniestore.service.IContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

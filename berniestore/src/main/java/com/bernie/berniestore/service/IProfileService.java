@@ -1,4 +1,4 @@
-package com.bernie.berniestore.service.implement;
+package com.bernie.berniestore.service;
 
 import com.bernie.berniestore.dto.ProfileRequestDTO;
 import com.bernie.berniestore.dto.ProfileResponseDTO;

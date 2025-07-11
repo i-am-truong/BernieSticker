@@ -1,4 +1,4 @@
-package com.bernie.berniestore.service.implement;
+package com.bernie.berniestore.service;
 
 import com.bernie.berniestore.dto.OrderRequestDTO;
 import com.bernie.berniestore.dto.OrderResponseDTO;

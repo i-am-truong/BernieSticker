@@ -2,7 +2,7 @@ package com.bernie.berniestore.controller;
 
 import com.bernie.berniestore.dto.OrderRequestDTO;
 import com.bernie.berniestore.dto.OrderResponseDTO;
-import com.bernie.berniestore.service.implement.IOrderService;
+import com.bernie.berniestore.service.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -2,7 +2,7 @@ package com.bernie.berniestore.controller;
 
 import com.bernie.berniestore.dto.PaymentIntentRequestDTO;
 import com.bernie.berniestore.dto.PaymentIntentResponseDTO;
-import com.bernie.berniestore.service.implement.IPaymentService;
+import com.bernie.berniestore.service.IPaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

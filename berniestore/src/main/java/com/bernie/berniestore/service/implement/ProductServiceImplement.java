@@ -3,6 +3,7 @@ package com.bernie.berniestore.service.implement;
 import com.bernie.berniestore.dto.ProductDTO;
 import com.bernie.berniestore.entity.Product;
 import com.bernie.berniestore.repository.ProductRepository;
+import com.bernie.berniestore.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImplement implements IProductService{
+public class ProductServiceImplement implements IProductService {
     private final ProductRepository productRepository;
 
     @Cacheable("products")
