@@ -2,7 +2,7 @@ package com.bernie.berniestore.controller;
 
 import com.bernie.berniestore.dto.ErrorResponseDTO;
 import com.bernie.berniestore.dto.ProductDTO;
-import com.bernie.berniestore.service.implement.IProductService;
+import com.bernie.berniestore.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

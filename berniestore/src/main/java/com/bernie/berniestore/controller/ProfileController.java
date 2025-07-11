@@ -2,7 +2,7 @@ package com.bernie.berniestore.controller;
 
 import com.bernie.berniestore.dto.ProfileRequestDTO;
 import com.bernie.berniestore.dto.ProfileResponseDTO;
-import com.bernie.berniestore.service.implement.IProfileService;
+import com.bernie.berniestore.service.IProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
