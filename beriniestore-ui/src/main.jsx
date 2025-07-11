@@ -87,21 +87,19 @@ const routeDefinitions = createRoutesFromElements(
 const appRouter = createBrowserRouter(routeDefinitions);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <Elements stripe={stripePromise}>
-      <Provider store={store}>
-        <RouterProvider router={appRouter} />
-      </Provider>
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        draggable
-        pauseOnHover
-        theme={localStorage.getItem("theme") === "dark" ? "dark" : "light"}
-        transition={Bounce}
-      />
-    </Elements>
-  </StrictMode>
+  <Elements stripe={stripePromise}>
+    <Provider store={store}>
+      <RouterProvider router={appRouter} />
+    </Provider>
+    <ToastContainer
+      position="top-center"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      draggable
+      pauseOnHover
+      theme={localStorage.getItem("theme") === "dark" ? "dark" : "light"}
+      transition={Bounce}
+    />
+  </Elements>
 );
