@@ -130,7 +130,7 @@ src/
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd beriniestore-ui
+cd berniestore-ui
 ```
 
 2. Install dependencies:
